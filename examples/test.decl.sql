@@ -1,15 +1,13 @@
-CREATE OR REPLACE PACKAGE utils AS
-
-    FUNCTION get_response(
-        request_id IN number
-    ) RETURN varchar2;
-
-    FUNCTION get_comment(
-        request_id IN number
-    ) RETURN varchar2;
-
-    FUNCTION get_question(
-        request_id IN number
-    ) RETURN varchar2;
-
-END;
+CREATE OR REPLACE PACKAGE emp_actions AS
+TYPE emprectyp IS RECORD (emp_id INT, salary REAL);
+CURSOR desc_salary RETURN EMPRECTYP;
+PROCEDURE hire_employee(
+    ename VARCHAR2,
+    job VARCHAR2,
+    mgr NUMBER,
+    sal NUMBER,
+    comm NUMBER,
+    deptno NUMBER
+);
+PROCEDURE fire_employee(emp_id NUMBER);
+END emp_actions;
