@@ -1,7 +1,7 @@
-"""Demo module for tests.
+"""
+Demo module for tests.
 
 Example:
-
 ```python
 parsed = parse_example()
 package = find_segment(parsed, 'create_package_statement')
@@ -12,14 +12,8 @@ for procedure in procedures:
 
 """
 
-from pathlib import Path
-
 from sqlfluff.core import Lexer, Parser
 from sqlfluff.core.parser import BaseSegment
-
-_SQL_FILE = Path() / 'examples' / 'test.decl.sql'
-_SQL = _SQL_FILE.read_text('utf-8')
-
 
 _lexer = Lexer(dialect='oracle')
 _parser = Parser(dialect='oracle')
@@ -29,9 +23,9 @@ class SegmentNotFoundError(Exception):
     """Cant found segment error."""
 
 
-def parse_example() -> BaseSegment:
+def parse(text: str) -> BaseSegment:
     """Parse example PL/SQL and return file Segment."""
-    lexed, _errors = _lexer.lex(str(_SQL))
+    lexed, _errors = _lexer.lex(text)
     parsed = _parser.parse(lexed)
     if parsed is None:
         raise RuntimeError

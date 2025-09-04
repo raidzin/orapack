@@ -275,7 +275,7 @@ wheels = [
 
 [[package]]
 name = "orapack"
-version = "0.1.0"
+version = "0.0.1"
 source = { virtual = "." }
 dependencies = [
     { name = "oracledb" },
@@ -287,6 +287,9 @@ lint = [
     { name = "mypy" },
     { name = "ruff" },
     { name = "wemake-python-styleguide" },
+]
+test = [
+    { name = "pytest" },
 ]
 
 [package.metadata]
@@ -301,6 +304,7 @@ lint = [
     { name = "ruff", specifier = ">=0.12.11" },
     { name = "wemake-python-styleguide", specifier = ">=1.4.0" },
 ]
+test = [{ name = "pytest", specifier = ">=8.4.1" }]
 
 [[package]]
 name = "packaging"
