@@ -1,0 +1,46 @@
+[project]
+name = "orapack"
+version = "0.0.1"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["oracledb>=3.3.0", "sqlfluff>=3.4.2"]
+
+[dependency-groups]
+lint = ["mypy>=1.17.1", "ruff>=0.12.11", "wemake-python-styleguide>=1.4.0"]
+test = ["pytest>=8.4.1"]
+
+[tool.ruff]
+include = ["orapack/**/*.py"]
+line-length = 80
+target-version = "py312"
+
+
+[tool.ruff.format]
+quote-style = 'single'
+indent-style = 'space'
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "COM812", # Ruff format incompatible
+  "D203", # Ruff D211 incompatible
+  "D212", # Ruff D213 incompatible
+  "D100",
+  "D104",
+  "D401",
+]
+flake8-quotes.inline-quotes = "single"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "D103"]
+
+[tool.mypy]
+packages = ['orapack', 'tests']
+strict = true
+strict_bytes = true
+local_partial_types = true
+warn_unreachable = true
+
+[tool.uv]
+default-groups = ["lint", "test"]
