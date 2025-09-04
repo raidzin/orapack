@@ -14,7 +14,7 @@ class Function:
     """Represent PL/SQL function."""
 
     name: str
-    args: list[Argument]
+    parameters: list[Argument]
     return_value: str | None
 
 
@@ -23,4 +23,4 @@ class Procedure:
     """Represent PL/SQL procedure."""
 
     name: str
-    args: list[Argument]
+    parameters: list[Argument]

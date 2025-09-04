@@ -4,7 +4,11 @@ version = "0.0.1"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["oracledb>=3.3.0", "sqlfluff>=3.4.2"]
+dependencies = [
+  "oracledb>=3.3.0",
+  "returns[compatible-mypy]>=0.26.0",
+  "sqlfluff>=3.4.2",
+]
 
 [dependency-groups]
 lint = ["mypy>=1.17.1", "ruff>=0.12.11", "wemake-python-styleguide>=1.4.0"]
@@ -41,6 +45,7 @@ strict = true
 strict_bytes = true
 local_partial_types = true
 warn_unreachable = true
+plugins = ["returns.contrib.mypy.returns_plugin"]
 
 [tool.uv]
 default-groups = ["lint", "test"]
