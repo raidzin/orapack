@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "dev"]
+  pull_request:
+    branches: ["main", "dev"]
+
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6.6.1
+
+      - name: UV sync
+        run: uv sync
+
+      - name: Ruff format
+        run: uv run ruff format --check
+
+      - name: Ruff
+        run: uv run ruff lint
+
+      - name: Mypy
+        run: uv run mypy
+
+      - name: WPS
+        run: uv run flake8 orapack --select WPS
