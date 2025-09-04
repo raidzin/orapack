@@ -1,4 +1,16 @@
-"""Demo module for tests."""
+"""Demo module for tests.
+
+Example:
+
+```python
+parsed = parse_example()
+package = find_segment(parsed, 'create_package_statement')
+procedures = find_all_segments(package, 'create_procedure_statement')
+for procedure in procedures:
+    print(get_function_name(procedure))
+```
+
+"""
 
 from pathlib import Path
 
@@ -13,6 +25,10 @@ _lexer = Lexer(dialect='oracle')
 _parser = Parser(dialect='oracle')
 
 
+class SegmentNotFoundError(Exception):
+    """Cant found segment error."""
+
+
 def parse_example() -> BaseSegment:
     """Parse example PL/SQL and return file Segment."""
     lexed, _errors = _lexer.lex(str(_SQL))
@@ -25,7 +41,7 @@ def parse_example() -> BaseSegment:
 def find_segment(
     start_segment: BaseSegment,
     segment_type: str,
-) -> BaseSegment | None:
+) -> BaseSegment:
     """Find first segment by type in segment tree."""
     to_check = [start_segment]
     while to_check:
@@ -33,7 +49,7 @@ def find_segment(
         if segment.type == segment_type:
             return segment
         to_check.extend(segment.segments)
-    return None
+    raise SegmentNotFoundError
 
 
 def find_all_segments(
@@ -49,3 +65,11 @@ def find_all_segments(
             found.append(segment)
         to_check.extend(segment.segments)
     return found
+
+
+def get_function_name(segment: BaseSegment) -> str:
+    """Return function or procedure name."""
+    return find_segment(
+        find_segment(segment, 'function_name'),
+        'word',
+    ).raw
