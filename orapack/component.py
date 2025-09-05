@@ -1,12 +1,23 @@
 from dataclasses import dataclass
+from enum import StrEnum
+
+
+class PythonType(StrEnum):
+    """Supported python types."""
+
+    bool = 'bool'
+    int = 'int'
+    float = 'float'
+    str = 'str'
+    datetime = 'datetime.datetime'
 
 
 @dataclass
-class Argument:
+class Parameter:
     """Used for function params or return value."""
 
     name: str
-    type: str
+    type: PythonType
 
 
 @dataclass
@@ -14,7 +25,7 @@ class Function:
     """Represent PL/SQL function."""
 
     name: str
-    parameters: list[Argument]
+    parameters: list[Parameter]
     return_value: str | None
 
 
@@ -23,4 +34,4 @@ class Procedure:
     """Represent PL/SQL procedure."""
 
     name: str
-    parameters: list[Argument]
+    parameters: list[Parameter]

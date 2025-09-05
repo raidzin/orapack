@@ -29,7 +29,11 @@ def parse(text: str) -> BaseSegment:
 
 
 def print_segment_tree(segment: BaseSegment, indent: int = 0) -> None:
-    """Output segment children tree."""
-    print(f'{" " * indent}{segment.type}')  # noqa: T201
+    """
+    Output segment children tree.
+
+    Useful in development
+    """
+    print(f'{" " * indent}{segment.type}')  # noqa: RUF100, T201, WPS421, WPS237
     for child in segment.segments:
         print_segment_tree(child, indent + 2)

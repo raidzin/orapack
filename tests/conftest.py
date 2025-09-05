@@ -16,6 +16,7 @@ PROCEDURE hire_employee(
     deptno NUMBER
 );
 PROCEDURE fire_employee(emp_id NUMBER);
+FUNCTION find_employee(ename VARCHAR2) RETURN NUMBER;
 END emp_actions;
 """
 
