@@ -1,7 +1,8 @@
 import pytest
-from sqlfluff.core.parser import BaseSegment
+from returns.result import Success
+from sqlfluff.dialects.dialect_oracle import FileSegment
 
-from orapack.main import parse
+from orapack import main
 
 _EXAMPLE_PACKAGE = """
 CREATE OR REPLACE PACKAGE emp_actions AS
@@ -16,6 +17,7 @@ PROCEDURE hire_employee(
     deptno NUMBER
 );
 PROCEDURE fire_employee(emp_id NUMBER);
+FUNCTION find_employee(ename VARCHAR2) RETURN NUMBER;
 END emp_actions;
 """
 
@@ -27,6 +29,10 @@ def example_package() -> str:
 
 
 @pytest.fixture
-def parsed_package(example_package: str) -> BaseSegment:
+def parsed_package(example_package: str) -> FileSegment:
     """Parsed example package."""
-    return parse(example_package)
+    match main.parse(example_package):
+        case Success(file_segment):
+            return file_segment
+        case _:
+            raise RuntimeError

@@ -4,14 +4,24 @@ version = "0.0.1"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["oracledb>=3.3.0", "sqlfluff>=3.4.2"]
+dependencies = [
+  "oracledb>=3.3.0",
+  "returns[compatible-mypy]>=0.26.0",
+  "sqlfluff>=3.4.2",
+]
 
 [dependency-groups]
-lint = ["mypy>=1.17.1", "ruff>=0.12.11", "wemake-python-styleguide>=1.4.0"]
+dev = ["pushpin>=0.5.0"]
+lint = [
+  "mypy>=1.17.1",
+  "pyrefly>=0.31.0",
+  "ruff>=0.12.11",
+  "wemake-python-styleguide>=1.4.0",
+]
 test = ["pytest>=8.4.1"]
 
 [tool.ruff]
-include = ["orapack/**/*.py"]
+include = ["orapack/**/*.py", "tests/**/*.py"]
 line-length = 80
 target-version = "py312"
 
@@ -29,6 +39,7 @@ ignore = [
   "D100",
   "D104",
   "D401",
+  "RUF100", # Conflict with WPS ignores
 ]
 flake8-quotes.inline-quotes = "single"
 
@@ -41,6 +52,10 @@ strict = true
 strict_bytes = true
 local_partial_types = true
 warn_unreachable = true
+plugins = ["returns.contrib.mypy.returns_plugin"]
+
+[tool.pyrefly]
+project-includes = ['orapack/**', 'tests/**']
 
 [tool.uv]
-default-groups = ["lint", "test"]
+default-groups = ["dev", "lint", "test"]
