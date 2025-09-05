@@ -7,55 +7,66 @@ from sqlfluff.dialects.dialect_oracle import (
     CreateProcedureStatementSegment,
 )
 
-from orapack.finder import find_all_segments, find_segment
+from orapack import finder
 
 PROCEDURE_SEGMENTS_COUNT = 2
 CALLABLE_SEGMENTS_COUNT = 3
 
 
 def test_find_segment(parsed_package: BaseSegment) -> None:
-    segment = find_segment(parsed_package, 'create_package_statement')
+    segment = finder.find_segment(parsed_package, 'create_package_statement')
 
     match segment:
-        case Some(value) if isinstance(value, CreatePackageStatementSegment):
+        case Some(package_segment) if isinstance(
+            package_segment,
+            CreatePackageStatementSegment,
+        ):
             pass
-        case Some(value):
-            pytest.fail(f'found incorrect segment {value}')
+        case Some(unknown_segment):
+            pytest.fail(f'found incorrect segment {unknown_segment}')
         case _:
             pytest.fail('incorrect find_segment')
 
 
 def test_many_find_segment(parsed_package: BaseSegment) -> None:
-    segment = find_segment(
+    segment = finder.find_segment(
         parsed_package,
         ['create_function_statement', 'create_procedure_statement'],
     )
 
     match segment:
-        case Some(value) if isinstance(value, CreateFunctionStatementSegment):
+        case Some(function_segment) if isinstance(
+            function_segment,
+            CreateFunctionStatementSegment,
+        ):
             pass
-        case Some(value) if isinstance(value, CreateProcedureStatementSegment):
+        case Some(procedure_segment) if isinstance(
+            procedure_segment,
+            CreateProcedureStatementSegment,
+        ):
             pass
-        case Some(value):
-            pytest.fail(f'found incorrect segment {value}')
+        case Some(unknown_segment):
+            pytest.fail(f'found incorrect segment {unknown_segment}')
         case _:
             pytest.fail('incorrect find_segment')
 
 
 def test_find_segment_empty(parsed_package: BaseSegment) -> None:
-    segment = find_segment(parsed_package, 'non_existent_segment')
+    segment = finder.find_segment(parsed_package, 'non_existent_segment')
 
     match segment:
         case Maybe.empty:
             pass
-        case Some(value):
-            pytest.fail(f'found incorrect segment {value}')
+        case Some(unknown_segment):
+            pytest.fail(f'found incorrect segment {unknown_segment}')
         case _:
             pytest.fail('incorrect find_segment')
 
 
 def test_find_all_segment(parsed_package: BaseSegment) -> None:
-    segments = find_all_segments(parsed_package, 'create_procedure_statement')
+    segments = finder.find_all_segments(
+        parsed_package, 'create_procedure_statement'
+    )
 
     assert len(segments) == PROCEDURE_SEGMENTS_COUNT
 
@@ -64,7 +75,7 @@ def test_find_all_segment(parsed_package: BaseSegment) -> None:
 
 
 def test_many_find_all_segment(parsed_package: BaseSegment) -> None:
-    segments = find_all_segments(
+    segments = finder.find_all_segments(
         parsed_package,
         ['create_procedure_statement', 'create_function_statement'],
     )
@@ -81,6 +92,6 @@ def test_many_find_all_segment(parsed_package: BaseSegment) -> None:
 
 
 def test_test_find_all_segment_error(parsed_package: BaseSegment) -> None:
-    segments = find_all_segments(parsed_package, 'non_existent_segment')
+    segments = finder.find_all_segments(parsed_package, 'non_existent_segment')
 
     assert len(segments) == 0

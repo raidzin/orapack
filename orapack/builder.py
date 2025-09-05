@@ -1,4 +1,5 @@
 from returns.maybe import Maybe
+from returns.result import safe
 from sqlfluff.dialects.dialect_oracle import (
     CreateFunctionStatementSegment,
     CreateProcedureStatementSegment,
@@ -22,29 +23,33 @@ def get_callable_name(
     )
 
 
+@safe
 def get_callable_parameters(
     callable_segment: CreateCallableStatementSegment,
-) -> Maybe[list[component.Parameter]]:
+) -> list[component.Parameter]:
     """Return function or procedure parameters."""
     raise NotImplementedError
 
 
+@safe
 def get_function_return_value(
     function_segment: CreateFunctionStatementSegment,
-) -> Maybe[component.PythonType]:
+) -> component.PythonType:
     """Return function return value."""
     raise NotImplementedError
 
 
+@safe
 def build_function(
     function_segment: CreateFunctionStatementSegment,
-) -> Maybe[component.Function]:
+) -> component.Function:
     """Build function structure."""
     raise NotImplementedError
 
 
+@safe
 def build_procedure(
     procedure_segment: CreateProcedureStatementSegment,
-) -> Maybe[component.Function]:
+) -> component.Function:
     """Build function structure."""
     raise NotImplementedError

@@ -12,20 +12,24 @@ for procedure in procedures:
 
 """
 
+from returns.result import Failure, Result, Success
 from sqlfluff.core import Lexer, Parser
 from sqlfluff.core.parser import BaseSegment
+from sqlfluff.dialects.dialect_oracle import FileSegment
 
 _lexer = Lexer(dialect='oracle')
 _parser = Parser(dialect='oracle')
 
 
-def parse(text: str) -> BaseSegment:
+def parse(text: str) -> Result[FileSegment, str]:
     """Parse example PL/SQL and return file Segment."""
     lexed, _errors = _lexer.lex(text)
     parsed = _parser.parse(lexed)
     if parsed is None:
-        raise RuntimeError
-    return parsed
+        return Failure('cant parse')
+    if not isinstance(parsed, FileSegment):
+        return Failure('parse incorrect segment')
+    return Success(parsed)
 
 
 def print_segment_tree(segment: BaseSegment, indent: int = 0) -> None:

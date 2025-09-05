@@ -21,17 +21,20 @@ class Parameter:
 
 
 @dataclass
-class Function:
-    """Represent PL/SQL function."""
+class Callable:
+    """Base callable class for functions & procedures."""
 
     name: str
-    parameters: list[Parameter]
+    parameters: list[Parameter]  # noqa: WPS110
+
+
+@dataclass
+class Function(Callable):
+    """Represent PL/SQL function."""
+
     return_value: str | None
 
 
 @dataclass
-class Procedure:
+class Procedure(Callable):
     """Represent PL/SQL procedure."""
-
-    name: str
-    parameters: list[Parameter]
